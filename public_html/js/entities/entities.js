@@ -41,7 +41,7 @@ game.PlayerEntity = me.Entity.extend ({
             this.renderable.setCurrentAnimation("idle");
         }
        
-        this._super(me.Entity, "update" [delta]);
+        this._super(me.Entity, "update", [delta]);
         return true;
     },
     
