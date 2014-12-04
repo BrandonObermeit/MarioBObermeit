@@ -40,10 +40,40 @@ game.PlayerEntity = me.Entity.extend ({
         }else{
             this.renderable.setCurrentAnimation("idle");
         }
+        
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+//        don't know if this works
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+         if (me.input.isKeyPressed('left')) {
+            this.flipX(true);
+            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
+        } else if (me.input.isKeyPressed('right')) {
+            this.flipX(false);
+            this.body.vel.x += this.body.accel.x * me.timer.tick;
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
+        } else {
+            this.body.vel.x = 0;
+            this.renderable.setCurrentAnimation("stand");
+        }
+     
+        if (me.input.isKeyPressed('jump')) {
+            if (!this.body.jumping && !this.body.falling) {
+                this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
+                this.body.jumping = true;
+            }
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+//        don't know if this works
+//        !!!!!!!!!!!!!!!!!!!!!!!!        
+        
        
         this._super(me.Entity, "update", [delta]);
         return true;
-    },
+    }},
     
     collisionHandler: function(response){
         
@@ -69,3 +99,24 @@ game.LevelTrigger = me.Entity.extend({
     }
     
 });
+
+game.BadGuy = me.Entity.extend({
+    init: function(x, y, settings){
+       this._super(me.Entity, 'init', [x, y,{
+           image: "slime",
+           spritewidth: "60",
+           spriteheight: "28",
+           width: 60,
+           height: 28,
+           getShape: function(){
+               return (new me.Rect(0, 0, 60, 28)).toPolygon();
+           }
+       }]);
+    },
+    
+    update: function(delta){
+
+           
+    }
+    
+    });
