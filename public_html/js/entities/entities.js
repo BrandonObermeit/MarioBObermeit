@@ -22,12 +22,36 @@ game.PlayerEntity = me.Entity.extend ({
     },
     
     update: function(delta){
-        if(me.input.isKeyPressed("right")){
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+//        don't know if this works
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+          if(me.input.isKeyPressed("right")){
             this.body.vel.x += this.body.accel.x * me.timer.tick;
+            this.flipX(false);
             
+        }else if(me.input.isKeyPressed("left")){
+            this.body.vel.x -= this.body.accel.x * me.timer.tick;
+            this.flipX(true);
         }else{
             this.body.vel.x = 0;
         }
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+//        don't know if this works
+//        !!!!!!!!!!!!!!!!!!!!!!!!
+        if (me.input.isKeyPressed('jump')) {
+            // make sure we are not already jumping or falling
+            if (!this.body.jumping && !this.body.falling) {
+                // set current vel to the maximum defined value
+                // gravity will then do the rest
+                this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
+                // set the jumping flag
+                this.body.jumping = true;
+            }
+ 
+        }
+        
+        
+     
         
         this.body.update(delta);
         me.collision.check(this, true, this.collisionHandler.bind(this), true);
@@ -39,44 +63,16 @@ game.PlayerEntity = me.Entity.extend ({
             }
         }else{
             this.renderable.setCurrentAnimation("idle");
-        }
+        }        
         
-//        !!!!!!!!!!!!!!!!!!!!!!!!
-//        don't know if this works
-//        !!!!!!!!!!!!!!!!!!!!!!!!
-         if (me.input.isKeyPressed('left')) {
-            this.flipX(true);
-            this.body.vel.x -= this.body.accel.x * me.timer.tick;
-            if (!this.renderable.isCurrentAnimation("walk")) {
-                this.renderable.setCurrentAnimation("walk");
-            }
-        } else if (me.input.isKeyPressed('right')) {
-            this.flipX(false);
-            this.body.vel.x += this.body.accel.x * me.timer.tick;
-            if (!this.renderable.isCurrentAnimation("walk")) {
-                this.renderable.setCurrentAnimation("walk");
-            }
-        } else {
-            this.body.vel.x = 0;
-            this.renderable.setCurrentAnimation("stand");
-        }
-     
-        if (me.input.isKeyPressed('jump')) {
-            if (!this.body.jumping && !this.body.falling) {
-                this.body.vel.y = -this.body.maxVel.y * me.timer.tick;
-                this.body.jumping = true;
-            }
-//        !!!!!!!!!!!!!!!!!!!!!!!!
-//        don't know if this works
-//        !!!!!!!!!!!!!!!!!!!!!!!!        
         
        
         this._super(me.Entity, "update", [delta]);
         return true;
-    }},
-    
-    collisionHandler: function(response){
-        
+    },
+
+       collisionHandler: function(response){
+      
     }
     
     
