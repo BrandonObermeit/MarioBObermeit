@@ -13,19 +13,25 @@ game.PlayerEntity = me.Entity.extend ({
        }]);
         
         this.renderable.addAnimation("idle", [2]);
+        //create an animation called smallwalk using pictures of the image defined above (mario)
+        //sets the animation to rin through pictures 
         this.renderable.addAnimation("smallWalk", [8, 9, 10, 11, 12, 13], 80);
         
         this.renderable.setCurrentAnimation("idle");
         
+        //sets the speed we go on the x and y axis
         this.body.setVelocity(5, 20);
+        
+        //sets the camera to follow mario
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
     
     update: function(delta){
-//        !!!!!!!!!!!!!!!!!!!!!!!!
-//        don't know if this works
-//        !!!!!!!!!!!!!!!!!!!!!!!!
+
+          //checks if the right key ispressed and if it is executes the following statement
           if(me.input.isKeyPressed("right")){
+            //sets the position of mario on the x axis by adding the x value from the setVelocitytimes the timer.tick
+            //me.timer.tick usesthe time since last amimation
             this.body.vel.x += this.body.accel.x * me.timer.tick;
             this.flipX(false);
             
@@ -35,9 +41,7 @@ game.PlayerEntity = me.Entity.extend ({
         }else{
             this.body.vel.x = 0;
         }
-//        !!!!!!!!!!!!!!!!!!!!!!!!
-//        don't know if this works
-//        !!!!!!!!!!!!!!!!!!!!!!!!
+
         if (me.input.isKeyPressed('jump')) {
             // make sure we are not already jumping or falling
             if (!this.body.jumping && !this.body.falling) {
@@ -81,6 +85,8 @@ game.PlayerEntity = me.Entity.extend ({
 game.LevelTrigger = me.Entity.extend({
     init: function(x, y, settings){
         this._super(me.Entity, 'init', [x, y, settings]);
+        //if something collides with this object then we will call the onCollision function and pass it
+        
         this.body.onCollision = this.onCollision.bind(this);
         this.level = settings.level;
         this.xSpawn = settings.xSpawn;
@@ -108,6 +114,22 @@ game.BadGuy = me.Entity.extend({
                return (new me.Rect(0, 0, 60, 28)).toPolygon();
            }
        }]);
+   
+    this.spritewidth = 60;
+    var width = settings.width;
+    x = this.pos.x;
+    this.startX = x;
+    this.endX = x + width - this.spritewidth;
+    this.pos.x = x + width - this.spritewidth;
+    this.updateBounds();
+    
+    this.alwaysUpdate = ture;
+    
+    this.walkLeft = false;
+    this.alive = true;
+    this.type = "badguy";
+    
+    
     },
     
     update: function(delta){
