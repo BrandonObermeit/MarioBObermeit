@@ -94,7 +94,7 @@ game.LevelTrigger = me.Entity.extend({
     },
     
     onCollision: function(){
-        console.log(this.level);
+//        console.log(this.level);
         this.body.setCollisionMask(me.collision.types.NO_OBJECT);
         me.levelDirector.loadLevel(this.level);
         me.state.current().resetPlayer(this.xSpawn, this.ySpawn);
@@ -123,7 +123,7 @@ game.BadGuy = me.Entity.extend({
     this.pos.x = x + width - this.spritewidth;
     this.updateBounds();
     
-    this.alwaysUpdate = ture;
+    this.alwaysUpdate = true;
     
     this.walkLeft = false;
     this.alive = true;
@@ -132,7 +132,7 @@ game.BadGuy = me.Entity.extend({
 //    this.renderable.addAnimation("run", [0, 1, 2], 80);
 //    this.renderable.setCurrentAnimation("run");
     
-    this.body.setVolocity(4, 6);
+    this.body.setVelocity(4, 6);
     },
     
     update: function(delta){
@@ -155,6 +155,10 @@ game.BadGuy = me.Entity.extend({
                 
        this._super(me.Entity, "update", [delta]);
        return true; 
+    },
+    
+    collideHandler: function(){
+        
     }
     
     });
